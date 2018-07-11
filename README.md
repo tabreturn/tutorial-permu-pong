@@ -11,4 +11,5 @@ Providing multiple input and game parameters, thereby allowing the student to ge
 * debounce button input
 * serve
 * restart on score
+* opponent
 * ...
