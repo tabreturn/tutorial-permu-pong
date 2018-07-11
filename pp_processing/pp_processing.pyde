@@ -8,21 +8,21 @@
 input_mode = 4
 
 # adjustable variables
-display_width = 800
-display_height = 600
-color_fg = '#FFFFFF'
-color_bg = '#000000'
-paddle_speed = 12
-paddle_thickness = 10
-paddle_length = 80
-paddle_margin = 80
-ball_xspeed = 6
-ball_yspeed = 2
-ball_speedlimit = 20
-ball_size = 10
-wall_bounciness = 1 # for no gain/loss in speed use 1
-wall_teleport = False
-net_width = 5
+display_width = int(random(200,1000))
+display_height = int(random(200,1000))
+color_fg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
+color_bg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
+paddle_speed = random(5,30)
+paddle_thickness = random(5,30)
+paddle_length = random(15,200)
+paddle_margin = random(15,200)
+ball_xspeed = random(2,20)
+ball_yspeed = random(1,10)
+ball_speedlimit = random(12,25)
+ball_size = random(5,20)
+wall_bounciness = random(0.8,1.8) # for no gain/loss in speed use 1
+wall_teleport = int(random(2))
+net_width = random(2,12)
 
 # leave these variables alone
 ball_x = 0
@@ -62,22 +62,12 @@ def draw():
     
     # teleporting walls
     if wall_teleport:
-        if ball_x+ball_size > width:
-            ball_x = 0
-        if ball_x < 0:
-            ball_x = width
         if ball_y+ball_size > height:
             ball_y = 0
         if ball_y < 0:
             ball_y = height    
     # rebounding walls
     else:
-        if ball_x+ball_size > width:
-            ball_xspeed *= -1 * wb
-            ball_yspeed *= wb
-        if ball_x < 0:
-            ball_xspeed *= -1 * wb
-            ball_yspeed *= wb
         if ball_y+ball_size > height:
             ball_yspeed *= -1 * wb
             ball_xspeed *= wb
