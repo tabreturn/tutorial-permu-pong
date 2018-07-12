@@ -1,5 +1,3 @@
-# https://github.com/tigoe/MakingThingsTalk2/blob/master/chapter2/project2/MonskiPong/MonskiPong.pde
-
 # input types
 # 1: 1-button
 # 2: 2-button
@@ -8,14 +6,14 @@
 input_mode = 4
 
 # adjustable variables
-display_width = int(random(200,1000))
+display_width = int(random(300,1000))
 display_height = int(random(200,1000))
 color_fg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
 color_bg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
 paddle_speed = random(5,30)
 paddle_thickness = random(5,30)
 paddle_length = random(15,200)
-paddle_margin = random(15,200)
+paddle_margin = random(15,100)
 ball_xspeed = random(2,8)
 ball_yspeed = random(2,8)
 ball_speedlimit = (5,13)
@@ -68,13 +66,13 @@ def draw():
     
     # teleporting walls
     if wall_teleport:
-        if ball_y+ball_size > height:
+        if ball_y > height:
             ball_y = 0
         if ball_y < 0:
             ball_y = height    
     # rebounding walls
     else:
-        if ball_y+ball_size > height:
+        if ball_y > height:
             ball_yspeed *= -1 * wb
             ball_xspeed *= wb
         if ball_y < 0:
@@ -102,9 +100,9 @@ def draw():
         try: 
             newline = data.find('\n')
             digit = data[newline+1:newline+2]
-            if digit == 'L':
+            if digit == 'U':
                 paddle_speed = -paddle_speed
-            if digit == 'R':
+            if digit == 'D':
                 paddle_speed = paddle_speed
         except:
             print('no connnection')
@@ -123,7 +121,7 @@ def draw():
     if serve:
         ball_x = width - paddle_margin - paddle_thickness - ball_size
         ball_y = paddle_y + paddle_length/2 - ball_size/2
-        ball_xspeed = abs(ball_xspeed)
+        ball_xspeed = abs(ball_xspeed)*-1
     else:
         ball_x += ball_xspeed
         ball_y += ball_yspeed
@@ -137,10 +135,9 @@ def draw():
       width-paddle_margin-paddle_thickness, paddle_y, 
       paddle_thickness, paddle_length
     )
-
     # player paddle collision
-    if ball_x+ball_size > width-paddle_margin-paddle_thickness:
-        if ball_y > paddle_y and ball_y < paddle_y + paddle_length:
+    if ball_x < paddle_margin+abs(ball_xspeed):
+        if ball_x > paddle_margin and ball_y > paddle_y and ball_y < paddle_y + paddle_length:
             ball_xspeed *= -1
     
     # opponent paddle
@@ -154,11 +151,15 @@ def draw():
       paddle_thickness, paddle_length
     )
     # opponent paddle collision
-    if ball_x < paddle_margin+paddle_thickness and ball_y > opponent_paddle_y and ball_y < opponent_paddle_y + paddle_length:
+    if ball_x > paddle_margin+paddle_thickness-abs(ball_xspeed):
+        if ball_x < paddle_margin+paddle_thickness and ball_y > opponent_paddle_y and ball_y < opponent_paddle_y + paddle_length:
             ball_xspeed *= -1
 
     # score
     if ball_x > width or ball_x < 0:
+        if int(random(0,2)):
+            ball_yspeed *= -1;
+            print('up')
         serve = True
 
 # keyboard input
