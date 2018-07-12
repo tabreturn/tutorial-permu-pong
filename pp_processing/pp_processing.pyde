@@ -6,21 +6,21 @@
 input_mode = 4
 
 # adjustable variables
-display_width = int(random(300,1000))
-display_height = int(random(200,1000))
+display_width = int(random(500,1000))
+display_height = int(random(200,600))
 color_fg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
 color_bg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
-paddle_speed = random(5,20)
+paddle_speed = random(10,20)
 paddle_thickness = random(5,30)
 paddle_length = random(15,200)
 paddle_margin = random(15,100)
-ball_xspeed = 2#random(2,8)
-ball_yspeed = 8#random(2,8)
+ball_xspeed = random(2,8)
+ball_yspeed = random(2,8)
 ball_speedlimit = (5,13)
 ball_size = random(5,20)
-wall_teleport = 0#int(random(2))
+wall_teleport = int(random(2))
 net_width = random(1,4)
-opponent_agility = random(1,4)
+opponent_agility = random(1,8)
 
 # leave these variables alone
 ball_x = 0
