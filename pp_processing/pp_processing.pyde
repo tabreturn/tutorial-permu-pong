@@ -10,17 +10,16 @@ display_width = int(random(300,1000))
 display_height = int(random(200,1000))
 color_fg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
 color_bg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
-paddle_speed = random(5,30)
+paddle_speed = random(5,20)
 paddle_thickness = random(5,30)
 paddle_length = random(15,200)
 paddle_margin = random(15,100)
-ball_xspeed = random(2,8)
-ball_yspeed = random(2,8)
+ball_xspeed = 2#random(2,8)
+ball_yspeed = 8#random(2,8)
 ball_speedlimit = (5,13)
 ball_size = random(5,20)
-wall_bounciness = 1#random(0.8,1.8) # for no gain/loss in speed use 1
-wall_teleport = int(random(2))
-net_width = random(2,12)
+wall_teleport = 0#int(random(2))
+net_width = random(1,4)
 opponent_agility = random(1,4)
 
 # leave these variables alone
@@ -57,13 +56,7 @@ def draw():
       (width/2)-(net_width/2), 0,
       net_width, height
     )
-    
-    # rebounding wall bounciness
-    if sqrt(ball_xspeed*ball_xspeed + ball_yspeed*ball_yspeed) < ball_speedlimit:
-        wb = wall_bounciness
-    else:
-        wb = 1
-    
+       
     # teleporting walls
     if wall_teleport:
         if ball_y > height:
@@ -73,11 +66,9 @@ def draw():
     # rebounding walls
     else:
         if ball_y > height:
-            ball_yspeed *= -1 * wb
-            ball_xspeed *= wb
+            ball_yspeed *= -1
         if ball_y < 0:
-            ball_yspeed *= -1 * wb
-            ball_xspeed *= wb
+            ball_yspeed *= -1
 
     data = arduino.readString()
     
@@ -139,7 +130,7 @@ def draw():
     if ball_x+ball_size > width-paddle_margin-paddle_thickness and ball_x < width-paddle_margin \
        and ball_y > paddle_y and ball_y < paddle_y+paddle_length:
         ball_xspeed *= -1
-        ball_x += ball_xspeed
+        ball_x = width-paddle_margin-paddle_thickness-ball_size
     
     # opponent paddle
     rect(
@@ -150,7 +141,7 @@ def draw():
     if ball_x < paddle_margin+paddle_thickness and ball_x > paddle_margin \
        and ball_y > opponent_paddle_y and ball_y < opponent_paddle_y+paddle_length:
         ball_xspeed *= -1
-        ball_x += ball_xspeed
+        ball_x = paddle_margin+paddle_thickness
     # ai
     if ball_y < opponent_paddle_y+paddle_length/2:
         opponent_paddle_y -= opponent_agility

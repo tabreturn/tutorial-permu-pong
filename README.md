@@ -15,5 +15,7 @@ Providing multiple input and game parameters, thereby allowing the student to ge
 * ~~restart on score~~
 * ~~opponent~~
 * ~~fix collisions~~
+* edge deflections
+* convex-style paddle rebounds
 * ...
 
