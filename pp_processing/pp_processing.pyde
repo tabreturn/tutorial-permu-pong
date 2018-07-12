@@ -30,6 +30,7 @@ ball_y = 0
 paddle_y = 0
 add_library('serial')
 arduino = False
+serve = True
 
 def setup():
     size(display_width, display_height)
@@ -41,7 +42,7 @@ def setup():
     arduino = Serial(this, Serial.list()[1], 9600)
     
 def draw():
-    global ball_x, ball_y, ball_xspeed, ball_yspeed, paddle_speed, paddle_y
+    global ball_x, ball_y, ball_xspeed, ball_yspeed, paddle_speed, paddle_y, serve
     
     # theme
     noStroke()
@@ -114,8 +115,12 @@ def draw():
         paddle_y = map(paddle_y,0,1023, 0,height-paddle_length)
     
     # ball
-    ball_x += ball_xspeed
-    ball_y += ball_yspeed
+    if serve:
+        ball_x = width - paddle_margin - ball_size
+        ball_y = paddle_y + paddle_length/2 - ball_size/2
+    else:
+        ball_x += ball_xspeed
+        ball_y += ball_yspeed
     rect(
       ball_x, ball_y,
       ball_size, ball_size
@@ -131,18 +136,20 @@ def draw():
     if ball_x+ball_size > width-paddle_margin:
         if ball_y > paddle_y and ball_y < paddle_y + paddle_length:
             ball_xspeed *= -1
-        else:
-            print('score')
+
+    # score
+    
 
 # keyboard input
 def keyPressed():
-    global paddle_speed, paddle_y
+    global paddle_speed, paddle_y, serve
+    
+    if keyCode == 32: # ascii code for space character
+        serve = False
 
     if input_mode == 4:
         if keyCode == UP:
-             print('up')
              paddle_y -= paddle_speed
         elif keyCode == DOWN:
-             print('down')
              paddle_y += paddle_speed
                
