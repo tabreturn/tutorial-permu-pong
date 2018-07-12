@@ -12,7 +12,7 @@ color_fg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(ran
 color_bg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
 paddle_speed = random(5,30)
 paddle_thickness = random(5,30)
-paddle_length = 400#random(15,200)
+paddle_length = random(15,200)
 paddle_margin = random(15,100)
 ball_xspeed = random(2,8)
 ball_yspeed = random(2,8)
@@ -86,9 +86,9 @@ def draw():
         try: 
             newline = data.find('\n')
             digit = data[newline+1:newline+2]
-            if digit == '1':
+            if digit == '1' and paddle_y < height:
                 paddle_speed = abs(paddle_speed)
-            if digit == '0':
+            if digit == '0' and paddle_y > 0:
                 paddle_speed = abs(paddle_speed)-1
             paddle_y += paddle_speed
         except:
@@ -100,9 +100,9 @@ def draw():
         try: 
             newline = data.find('\n')
             digit = data[newline+1:newline+2]
-            if digit == 'U':
+            if digit == 'U' and paddle_y < height:
                 paddle_speed = -paddle_speed
-            if digit == 'D':
+            if digit == 'D' and paddle_y > 0:
                 paddle_speed = paddle_speed
         except:
             print('no connnection')
@@ -139,6 +139,7 @@ def draw():
     if ball_x+ball_size > width-paddle_margin-paddle_thickness and ball_x < width-paddle_margin \
        and ball_y > paddle_y and ball_y < paddle_y+paddle_length:
         ball_xspeed *= -1
+        ball_x += ball_xspeed
     
     # opponent paddle
     rect(
@@ -149,6 +150,7 @@ def draw():
     if ball_x < paddle_margin+paddle_thickness and ball_x > paddle_margin \
        and ball_y > opponent_paddle_y and ball_y < opponent_paddle_y+paddle_length:
         ball_xspeed *= -1
+        ball_x += ball_xspeed
     # ai
     if ball_y < opponent_paddle_y+paddle_length/2:
         opponent_paddle_y -= opponent_agility
@@ -169,8 +171,7 @@ def keyPressed():
         serve = False
 
     if input_mode == 4:
-        if keyCode == UP:
+        if keyCode == UP and paddle_y > 0:
              paddle_y -= paddle_speed
-        elif keyCode == DOWN:
+        elif keyCode == DOWN and paddle_y+paddle_length < height:
              paddle_y += paddle_speed
-               
