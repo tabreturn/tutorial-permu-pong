@@ -14,14 +14,14 @@ color_fg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(ran
 color_bg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
 paddle_speed = random(5,30)
 paddle_thickness = random(5,30)
-paddle_length = random(15,200)
+paddle_length = 500#random(15,200)
 paddle_margin = random(15,200)
-ball_xspeed = random(2,20)
-ball_yspeed = random(1,10)
-ball_speedlimit = random(12,25)
+ball_xspeed = random(2,8)
+ball_yspeed = random(2,8)
+ball_speedlimit = (5,13)
 ball_size = random(5,20)
 wall_bounciness = random(0.8,1.8) # for no gain/loss in speed use 1
-wall_teleport = int(random(2))
+wall_teleport = 1#int(random(2))
 net_width = random(2,12)
 
 # leave these variables alone
@@ -31,10 +31,14 @@ paddle_y = 0
 add_library('serial')
 arduino = False
 serve = True
+opponent_paddle_y = 0
 
 def setup():
     size(display_width, display_height)
-    frameRate(30) # frames per second
+    frameRate(60) # frames per second
+    
+    global opponent_paddle_y
+    opponent_paddle_y = height/2 - paddle_length/2
     
     # connect to arduino
     global arduino
@@ -42,7 +46,7 @@ def setup():
     arduino = Serial(this, Serial.list()[1], 9600)
     
 def draw():
-    global ball_x, ball_y, ball_xspeed, ball_yspeed, paddle_speed, paddle_y, serve
+    global ball_x, ball_y, ball_xspeed, ball_yspeed, paddle_speed, paddle_y, serve, opponent_paddle_y
     
     # theme
     noStroke()
@@ -85,7 +89,9 @@ def draw():
             newline = data.find('\n')
             digit = data[newline+1:newline+2]
             if digit == '1':
-                paddle_speed *= -1
+                paddle_speed = abs(paddle_speed)
+            if digit == '0':
+                paddle_speed = abs(paddle_speed)-1
         except:
             print('no connnection')
         paddle_y += paddle_speed
@@ -116,8 +122,9 @@ def draw():
     
     # ball
     if serve:
-        ball_x = width - paddle_margin - ball_size
+        ball_x = width - paddle_margin - paddle_thickness - ball_size
         ball_y = paddle_y + paddle_length/2 - ball_size/2
+        ball_xspeed = abs(ball_xspeed)
     else:
         ball_x += ball_xspeed
         ball_y += ball_yspeed
@@ -126,19 +133,31 @@ def draw():
       ball_size, ball_size
     )
     
-    # paddle
+    # player paddle
     rect(
-      width-paddle_margin, paddle_y, 
+      width-paddle_margin-paddle_thickness, paddle_y, 
       paddle_thickness, paddle_length
     )
     
-    # paddle collision
-    if ball_x+ball_size > width-paddle_margin:
+    rect(width-paddle_margin-paddle_thickness,0, 1,height)
+    # player paddle collision
+    if ball_x+ball_size > width-paddle_margin-paddle_thickness:
         if ball_y > paddle_y and ball_y < paddle_y + paddle_length:
             ball_xspeed *= -1
+    
+    # opponent paddle
+    rect(
+      paddle_margin, ball_y-paddle_length/2, 
+      paddle_thickness, paddle_length
+    )
+    # opponent paddle collision
+    if ball_x < paddle_margin+paddle_thickness:
+        #if ball_y > opponent_paddle_y and ball_y < opponent_paddle_y + paddle_length:
+        ball_xspeed *= -1
 
     # score
-    
+    if ball_x > width or ball_x < 0:
+        serve = True
 
 # keyboard input
 def keyPressed():
