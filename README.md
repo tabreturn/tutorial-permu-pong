@@ -10,10 +10,10 @@ Providing multiple input and game parameters, thereby allowing the student to ge
 
 ## todo
 
-* debounce button input
+* ~~debounce button input~~
 * ~~serve~~
 * ~~restart on score~~
-* opponent
+* ~~opponent~~
+* fix collisions
 * ...
 
-Peters, David <>

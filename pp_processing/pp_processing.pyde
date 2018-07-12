@@ -14,7 +14,7 @@ color_fg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(ran
 color_bg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
 paddle_speed = random(5,30)
 paddle_thickness = random(5,30)
-paddle_length = 500#random(15,200)
+paddle_length = random(15,200)
 paddle_margin = random(15,200)
 ball_xspeed = random(2,8)
 ball_yspeed = random(2,8)
@@ -23,6 +23,7 @@ ball_size = random(5,20)
 wall_bounciness = random(0.8,1.8) # for no gain/loss in speed use 1
 wall_teleport = 1#int(random(2))
 net_width = random(2,12)
+opponent_agility = random(1,4)
 
 # leave these variables alone
 ball_x = 0
@@ -80,7 +81,6 @@ def draw():
             ball_yspeed *= -1 * wb
             ball_xspeed *= wb
 
-
     data = arduino.readString()
     
     # input type: 1 button serial data to y-coord
@@ -92,10 +92,10 @@ def draw():
                 paddle_speed = abs(paddle_speed)
             if digit == '0':
                 paddle_speed = abs(paddle_speed)-1
+            paddle_y += paddle_speed
         except:
+            paddle_y = height/2 - paddle_length/2 
             print('no connnection')
-        paddle_y += paddle_speed
-
 
     # input type: 1 button serial data to y-coord
     if input_mode == 2:
@@ -110,7 +110,6 @@ def draw():
             print('no connnection')
         paddle_y += paddle_speed
         
-    
     # input type: analog serial data to y-coord
     if input_mode == 3:
         try:
@@ -138,22 +137,25 @@ def draw():
       width-paddle_margin-paddle_thickness, paddle_y, 
       paddle_thickness, paddle_length
     )
-    
-    rect(width-paddle_margin-paddle_thickness,0, 1,height)
+
     # player paddle collision
     if ball_x+ball_size > width-paddle_margin-paddle_thickness:
         if ball_y > paddle_y and ball_y < paddle_y + paddle_length:
             ball_xspeed *= -1
     
     # opponent paddle
+    # ai
+    if ball_y < opponent_paddle_y+paddle_length/2:
+        opponent_paddle_y -= opponent_agility
+    if ball_y > opponent_paddle_y+paddle_length/2:
+        opponent_paddle_y += opponent_agility
     rect(
-      paddle_margin, ball_y-paddle_length/2, 
+      paddle_margin, opponent_paddle_y, 
       paddle_thickness, paddle_length
     )
     # opponent paddle collision
-    if ball_x < paddle_margin+paddle_thickness:
-        #if ball_y > opponent_paddle_y and ball_y < opponent_paddle_y + paddle_length:
-        ball_xspeed *= -1
+    if ball_x < paddle_margin+paddle_thickness and ball_y > opponent_paddle_y and ball_y < opponent_paddle_y + paddle_length:
+            ball_xspeed *= -1
 
     # score
     if ball_x > width or ball_x < 0:
