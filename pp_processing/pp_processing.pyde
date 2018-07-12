@@ -12,14 +12,14 @@ color_fg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(ran
 color_bg = '#' + hex(int(random(255)),2) + hex(int(random(255)),2) + hex(int(random(255)),2)
 paddle_speed = random(5,30)
 paddle_thickness = random(5,30)
-paddle_length = random(15,200)
+paddle_length = 400#random(15,200)
 paddle_margin = random(15,100)
 ball_xspeed = random(2,8)
 ball_yspeed = random(2,8)
 ball_speedlimit = (5,13)
 ball_size = random(5,20)
-wall_bounciness = random(0.8,1.8) # for no gain/loss in speed use 1
-wall_teleport = 1#int(random(2))
+wall_bounciness = 1#random(0.8,1.8) # for no gain/loss in speed use 1
+wall_teleport = int(random(2))
 net_width = random(2,12)
 opponent_agility = random(1,4)
 
@@ -136,30 +136,29 @@ def draw():
       paddle_thickness, paddle_length
     )
     # player paddle collision
-    if ball_x < paddle_margin+abs(ball_xspeed):
-        if ball_x > paddle_margin and ball_y > paddle_y and ball_y < paddle_y + paddle_length:
-            ball_xspeed *= -1
+    if ball_x+ball_size > width-paddle_margin-paddle_thickness and ball_x < width-paddle_margin \
+       and ball_y > paddle_y and ball_y < paddle_y+paddle_length:
+        ball_xspeed *= -1
     
     # opponent paddle
-    # ai
-    if ball_y < opponent_paddle_y+paddle_length/2:
-        opponent_paddle_y -= opponent_agility
-    if ball_y > opponent_paddle_y+paddle_length/2:
-        opponent_paddle_y += opponent_agility
     rect(
       paddle_margin, opponent_paddle_y, 
       paddle_thickness, paddle_length
     )
     # opponent paddle collision
-    if ball_x > paddle_margin+paddle_thickness-abs(ball_xspeed):
-        if ball_x < paddle_margin+paddle_thickness and ball_y > opponent_paddle_y and ball_y < opponent_paddle_y + paddle_length:
-            ball_xspeed *= -1
+    if ball_x < paddle_margin+paddle_thickness and ball_x > paddle_margin \
+       and ball_y > opponent_paddle_y and ball_y < opponent_paddle_y+paddle_length:
+        ball_xspeed *= -1
+    # ai
+    if ball_y < opponent_paddle_y+paddle_length/2:
+        opponent_paddle_y -= opponent_agility
+    if ball_y > opponent_paddle_y+paddle_length/2:
+        opponent_paddle_y += opponent_agility
 
     # score
     if ball_x > width or ball_x < 0:
         if int(random(0,2)):
             ball_yspeed *= -1;
-            print('up')
         serve = True
 
 # keyboard input

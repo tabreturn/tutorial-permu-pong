@@ -2,7 +2,7 @@
 
 A Pong of many permutations
 
-Proceesing.py + Arduino Pong tutorial files
+Processing.py + Arduino Pong tutorial files
 
 Providing multiple input and game parameters, thereby allowing the student to generate variations of Pong by playing with different combinations of Processing variables and Arduino inputs.
 
@@ -14,6 +14,6 @@ Providing multiple input and game parameters, thereby allowing the student to ge
 * ~~serve~~
 * ~~restart on score~~
 * ~~opponent~~
-* fix collisions
+* ~~fix collisions~~
 * ...
 
