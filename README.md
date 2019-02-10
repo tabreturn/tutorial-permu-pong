@@ -1,4 +1,4 @@
-# permu-pong
+# tutorial-permu-pong
 
 A Pong of many permutations
 
