@@ -1,6 +1,6 @@
 # Permu-Pong
 
-A Pong of many permutations
+*A Pong of many permutations*
 
 Processing.py + Arduino Pong tutorial files
 
