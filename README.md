@@ -13,12 +13,12 @@ Providing multiple input and game parameters, thereby allowing the student to ge
 
 ## todo
 
-* ~~debounce button input~~
-* ~~serve~~
-* ~~restart on score~~
-* ~~opponent~~
-* ~~fix collisions~~
-* edge deflections
-* convex-style paddle rebounds
-* ...
+- [x] debounce button input
+- [x] serve
+- [x] restart on score
+- [x] opponent
+- [x] fix collisions
+- [ ] edge deflections
+- [ ] convex-style paddle rebounds
+- [ ] ...
 
